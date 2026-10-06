@@ -1,0 +1,3373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShipTrack - Logistics Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+ --primary:#2563eb;
+ --primary-dark:#1d4ed8;
+ --secondary:#0f172a;
+ --success:#16a34a;
+ --warning:#d97706;
+ --danger:#dc2626;
+ --info:#0891b2;
+ --muted:#64748b;
+ --bg:#f1f5f9;
+ --card:#fff;
+ --border:#e2e8f0;
+ --text:#0f172a;
+ --shadow:0 10px 30px rgba(15,23,42,.08)
+}
+
+body{
+ font-family:Inter,Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.app{min-height:100vh}
+
+.topbar{
+ height:68px;
+ background:#fff;
+ border-bottom:1px solid var(--border);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 25px;
+ position:sticky;
+ top:0;
+ z-index:50
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ font-weight:800;
+ font-size:21px;
+ color:var(--secondary)
+}
+
+.brand-icon{
+ width:40px;
+ height:40px;
+ border-radius:12px;
+ background:linear-gradient(135deg,#2563eb,#7c3aed);
+ color:white;
+ display:grid;
+ place-items:center
+}
+
+.top-user{
+ display:flex;
+ align-items:center;
+ gap:12px
+}
+
+.avatar{
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ background:#dbeafe;
+ color:#1d4ed8;
+ display:grid;
+ place-items:center;
+ font-weight:800
+}
+
+.btn{
+ border:0;
+ border-radius:10px;
+ padding:11px 16px;
+ font-weight:700;
+ transition:.2s
+}
+
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-secondary{background:#e2e8f0;color:#0f172a}
+.btn-success{background:var(--success);color:white}
+.btn-warning{background:var(--warning);color:white}
+.btn-danger{background:var(--danger);color:white}
+.btn-info{background:var(--info);color:white}
+.btn-outline{background:white;border:1px solid var(--border);color:#334155}
+.btn-sm{padding:8px 11px;font-size:12px}
+
+.layout{
+ display:flex;
+ min-height:calc(100vh - 68px)
+}
+
+.sidebar{
+ width:245px;
+ background:#0f172a;
+ color:#cbd5e1;
+ padding:18px 12px;
+ flex-shrink:0
+}
+
+.sidebar-title{
+ font-size:11px;
+ text-transform:uppercase;
+ letter-spacing:1px;
+ color:#64748b;
+ padding:12px
+}
+
+.nav-item{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ width:100%;
+ padding:12px;
+ border:0;
+ background:transparent;
+ color:#cbd5e1;
+ border-radius:10px;
+ text-align:left;
+ margin-bottom:4px;
+ font-weight:600
+}
+
+.nav-item:hover,
+.nav-item.active{
+ background:#1e293b;
+ color:white
+}
+
+.nav-item.active{
+ box-shadow:inset 3px 0 #60a5fa
+}
+
+.main{
+ flex:1;
+ padding:25px;
+ min-width:0
+}
+
+.page-title{
+ font-size:26px;
+ font-weight:800;
+ margin-bottom:6px
+}
+
+.page-subtitle{
+ color:var(--muted);
+ margin-bottom:24px
+}
+
+.grid{
+ display:grid;
+ gap:18px
+}
+
+.stats{
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ margin-bottom:22px
+}
+
+.stat{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:20px;
+ box-shadow:var(--shadow)
+}
+
+.stat-label{
+ font-size:13px;
+ color:var(--muted);
+ font-weight:600
+}
+
+.stat-value{
+ font-size:28px;
+ font-weight:800;
+ margin-top:7px
+}
+
+.stat-icon{
+ float:right;
+ width:42px;
+ height:42px;
+ border-radius:12px;
+ background:#eff6ff;
+ color:#2563eb;
+ display:grid;
+ place-items:center
+}
+
+.card{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:20px;
+ box-shadow:var(--shadow);
+ margin-bottom:18px
+}
+
+.card h3{margin-bottom:15px}
+
+.card-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:15px
+}
+
+.form-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:15px
+}
+
+.form-grid.three{
+ grid-template-columns:repeat(3,1fr)
+}
+
+.field{
+ display:flex;
+ flex-direction:column;
+ gap:7px
+}
+
+.field.full{
+ grid-column:1/-1
+}
+
+.field label{
+ font-size:13px;
+ font-weight:700;
+ color:#334155
+}
+
+.field input,
+.field select,
+.field textarea{
+ width:100%;
+ border:1px solid #cbd5e1;
+ border-radius:10px;
+ padding:11px 12px;
+ outline:none;
+ background:white
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+ border-color:#2563eb;
+ box-shadow:0 0 0 3px #dbeafe
+}
+
+.field textarea{
+ min-height:90px;
+ resize:vertical
+}
+
+.actions{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-top:18px
+}
+
+.table-wrap{
+ overflow:auto
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:720px
+}
+
+th,td{
+ text-align:left;
+ padding:13px;
+ border-bottom:1px solid var(--border);
+ font-size:13px;
+ vertical-align:middle
+}
+
+th{
+ background:#f8fafc;
+ color:#475569;
+ font-size:12px;
+ text-transform:uppercase
+}
+
+.badge{
+ display:inline-flex;
+ padding:5px 9px;
+ border-radius:999px;
+ font-size:11px;
+ font-weight:800;
+ white-space:nowrap
+}
+
+.badge-created{background:#e0f2fe;color:#0369a1}
+.badge-picked{background:#fef3c7;color:#92400e}
+.badge-transit{background:#ede9fe;color:#6d28d9}
+.badge-out{background:#ffedd5;color:#c2410c}
+.badge-delivered{background:#dcfce7;color:#166534}
+.badge-cancelled{background:#fee2e2;color:#991b1b}
+
+.login-page{
+ min-height:100vh;
+ display:grid;
+ place-items:center;
+ padding:25px;
+ background:linear-gradient(135deg,#0f172a,#1e3a8a 55%,#312e81)
+}
+
+.login-shell{
+ width:min(1000px,100%);
+ background:white;
+ border-radius:25px;
+ overflow:hidden;
+ box-shadow:0 25px 80px rgba(0,0,0,.25);
+ display:grid;
+ grid-template-columns:1fr 1fr
+}
+
+.login-hero{
+ padding:45px;
+ background:linear-gradient(145deg,#1d4ed8,#4f46e5);
+ color:white
+}
+
+.login-hero h1{
+ font-size:38px;
+ line-height:1.05;
+ margin:30px 0 15px
+}
+
+.login-hero p{
+ color:#dbeafe;
+ line-height:1.7
+}
+
+.feature-list{
+ margin-top:30px;
+ display:grid;
+ gap:13px
+}
+
+.feature-list div{
+ display:flex;
+ gap:10px;
+ align-items:center
+}
+
+.login-box{
+ padding:40px
+}
+
+.login-box h2{
+ font-size:26px;
+ margin-bottom:8px
+}
+
+.login-box>p{
+ color:var(--muted);
+ font-size:14px;
+ margin-bottom:22px
+}
+
+.role-picker{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:9px;
+ margin-bottom:20px
+}
+
+.role-btn{
+ border:1px solid var(--border);
+ background:#f8fafc;
+ border-radius:10px;
+ padding:12px 5px;
+ font-weight:700;
+ color:#475569
+}
+
+.role-btn.active{
+ background:#dbeafe;
+ border-color:#60a5fa;
+ color:#1d4ed8
+}
+
+.demo{
+ background:#f8fafc;
+ border:1px solid var(--border);
+ padding:13px;
+ border-radius:10px;
+ font-size:12px;
+ margin-top:15px;
+ color:#475569
+}
+
+.public-top{
+ position:absolute;
+ top:18px;
+ left:20px;
+ color:white;
+ font-weight:800;
+ font-size:18px
+}
+
+.searchbar{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px
+}
+
+.searchbar input{
+ flex:1;
+ border:1px solid var(--border);
+ border-radius:10px;
+ padding:11px 13px
+}
+
+.timeline{
+ position:relative;
+ margin:10px 0 5px;
+ padding-left:25px
+}
+
+.timeline:before{
+ content:"";
+ position:absolute;
+ left:7px;
+ top:3px;
+ bottom:3px;
+ width:2px;
+ background:#dbeafe
+}
+
+.event{
+ position:relative;
+ margin-bottom:19px
+}
+
+.event:before{
+ content:"";
+ position:absolute;
+ left:-22px;
+ top:3px;
+ width:10px;
+ height:10px;
+ border-radius:50%;
+ background:#2563eb;
+ border:3px solid #dbeafe
+}
+
+.event strong{
+ display:block;
+ font-size:14px
+}
+
+.event span{
+ font-size:12px;
+ color:var(--muted)
+}
+
+.toast{
+ position:fixed;
+ right:20px;
+ bottom:20px;
+ background:#0f172a;
+ color:white;
+ padding:14px 18px;
+ border-radius:12px;
+ box-shadow:var(--shadow);
+ z-index:100;
+ max-width:350px
+}
+
+.modal-backdrop{
+ position:fixed;
+ inset:0;
+ background:rgba(15,23,42,.6);
+ display:grid;
+ place-items:center;
+ z-index:90;
+ padding:20px
+}
+
+.modal{
+ background:white;
+ border-radius:18px;
+ width:min(600px,100%);
+ max-height:90vh;
+ overflow:auto;
+ padding:22px
+}
+
+.close{
+ border:0;
+ background:#f1f5f9;
+ border-radius:8px;
+ padding:7px 10px
+}
+
+.pill{
+ padding:4px 8px;
+ border-radius:6px;
+ background:#f1f5f9;
+ font-size:11px;
+ font-weight:700
+}
+
+.progress{
+ display:flex;
+ align-items:flex-start;
+ margin:22px 0
+}
+
+.step{
+ flex:1;
+ text-align:center;
+ position:relative;
+ color:#94a3b8;
+ font-size:11px;
+ font-weight:700
+}
+
+.step:before{
+ content:"";
+ display:block;
+ width:25px;
+ height:25px;
+ border-radius:50%;
+ background:#e2e8f0;
+ margin:0 auto 7px;
+ position:relative;
+ z-index:2
+}
+
+.step:not(:last-child):after{
+ content:"";
+ height:3px;
+ background:#e2e8f0;
+ position:absolute;
+ top:11px;
+ left:50%;
+ width:100%;
+ z-index:1
+}
+
+.step.done{
+ color:#166534
+}
+
+.step.done:before{
+ background:#16a34a
+}
+
+.step.done:not(:last-child):after{
+ background:#86efac
+}
+
+.notice{
+ padding:13px 15px;
+ border-radius:10px;
+ background:#eff6ff;
+ border:1px solid #bfdbfe;
+ color:#1e40af;
+ font-size:13px;
+ margin-bottom:16px
+}
+
+@media(max-width:900px){
+ .login-shell{grid-template-columns:1fr}
+ .login-hero{display:none}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .sidebar{width:72px}
+ .sidebar .sidebar-title,
+ .sidebar .nav-label{display:none}
+ .nav-item{justify-content:center}
+ .main{padding:17px}
+}
+
+@media(max-width:650px){
+ .topbar{padding:0 12px}
+ .main{padding:12px}
+ .stats,
+ .form-grid,
+ .form-grid.three{grid-template-columns:1fr}
+ .sidebar{display:none}
+ .top-user .role-text{display:none}
+ .login-box{padding:25px}
+ .role-picker{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+<div id="toast" class="toast hidden"></div>
+<div id="modal" class="modal-backdrop hidden"></div>
+
+<script>
+
+const KEYS={
+ users:"shiptrack_users_v5",
+ shipments:"shiptrack_shipments_v5",
+ session:"shiptrack_session_v5"
+};
+
+let state={
+ users:[],
+ shipments:[],
+ session:null,
+ currentView:"dashboard",
+ selectedRole:"customer"
+};
+
+const $=id=>document.getElementById(id);
+
+function load(){
+ try{
+  state.users=JSON.parse(localStorage.getItem(KEYS.users)||"[]");
+  state.shipments=JSON.parse(localStorage.getItem(KEYS.shipments)||"[]");
+  state.session=JSON.parse(localStorage.getItem(KEYS.session)||"null");
+ }catch(e){
+  state.users=[];
+  state.shipments=[];
+  state.session=null;
+ }
+}
+
+function save(){
+ localStorage.setItem(KEYS.users,JSON.stringify(state.users));
+ localStorage.setItem(KEYS.shipments,JSON.stringify(state.shipments));
+
+ if(state.session){
+  localStorage.setItem(KEYS.session,JSON.stringify(state.session));
+ }else{
+  localStorage.removeItem(KEYS.session);
+ }
+}
+
+function uid(prefix){
+ return prefix+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
+}
+
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,m=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ }[m]));
+}
+
+function fmt(d){
+ if(!d)return"-";
+ return new Date(d).toLocaleString();
+}
+
+function toast(msg){
+ $("toast").textContent=msg;
+ $("toast").classList.remove("hidden");
+
+ setTimeout(()=>{
+  $("toast").classList.add("hidden");
+ },3000);
+}
+
+function statusClass(s){
+ return ({
+  Created:"badge-created",
+  "Picked Up":"badge-picked",
+  "In Transit":"badge-transit",
+  "Out for Delivery":"badge-out",
+  Delivered:"badge-delivered",
+  Cancelled:"badge-cancelled"
+ })[s]||"badge-created";
+}
+
+function badge(s){
+ return `<span class="badge ${statusClass(s)}">${esc(s)}</span>`;
+}
+
+function roleLabel(r){
+ return r==="delivery"
+  ?"Delivery Person"
+  :r[0].toUpperCase()+r.slice(1);
+}
+
+function currentUser(){
+ return state.users.find(u=>u.id===state.session?.userId);
+}
+
+function trackingId(){
+ return "ST-"+
+  Math.floor(100000+Math.random()*900000)+
+  "-"+
+  Math.random().toString(36).slice(2,5).toUpperCase();
+}
+
+function datePlus(days){
+ let d=new Date();
+ d.setDate(d.getDate()+days);
+ return d.toISOString();
+}
+
+function addEvent(sh,status,note){
+ sh.events=sh.events||[];
+
+ sh.events.unshift({
+  status,
+  note,
+  date:new Date().toISOString(),
+  by:currentUser()?.name||"System"
+ });
+}
+
+function seed(){
+
+ if(state.users.length)return;
+
+ state.users=[
+  {
+   id:"u_admin",
+   name:"System Admin",
+   email:"admin@shiptrack.com",
+   password:"admin123",
+   role:"admin",
+   phone:"9999999999",
+   active:true
+  },
+  {
+   id:"u_driver",
+   name:"Delivery Person",
+   email:"driver@shiptrack.com",
+   password:"driver123",
+   role:"delivery",
+   phone:"9999999998",
+   active:true
+  },
+  {
+   id:"u_customer",
+   name:"Demo Customer",
+   email:"customer@shiptrack.com",
+   password:"customer123",
+   role:"customer",
+   phone:"9999999997",
+   active:true
+  }
+ ];
+
+ state.shipments=[
+  {
+   id:"s_demo",
+   trackingId:"ST-483921-ABC",
+   customerId:"u_customer",
+   customerName:"Demo Customer",
+   senderName:"Demo Customer",
+   senderAddress:"Hyderabad, Telangana",
+   origin:"Hyderabad, Telangana",
+   recipientName:"Demo Receiver",
+   destination:"Bengaluru, Karnataka",
+   weight:"2",
+   service:"Express",
+   priority:"High",
+   deliveryPersonId:"u_driver",
+   deliveryPersonName:"Delivery Person",
+   status:"In Transit",
+   createdAt:new Date(Date.now()-86400000).toISOString(),
+   estimatedDelivery:datePlus(1),
+
+   events:[
+    {
+     status:"In Transit",
+     note:"Package is moving to destination",
+     date:new Date().toISOString(),
+     by:"Delivery Person"
+    },
+    {
+     status:"Picked Up",
+     note:"Package picked up from sender",
+     date:new Date(Date.now()-43200000).toISOString(),
+     by:"Delivery Person"
+    },
+    {
+     status:"Created",
+     note:"Shipment created",
+     date:new Date(Date.now()-86400000).toISOString(),
+     by:"Demo Customer"
+    }
+   ]
+  }
+ ];
+
+ save();
+}
+
+function renderLogin(){
+
+ $("app").innerHTML=`
+
+ <div class="login-page">
+
+  <div class="public-top">🚚 ShipTrack</div>
+
+  <div class="login-shell">
+
+   <div class="login-hero">
+
+    <div style="font-size:16px;font-weight:700">
+     LOGISTICS MANAGEMENT PLATFORM
+    </div>
+
+    <h1>
+     Track every shipment from one place.
+    </h1>
+
+    <p>
+     Choose your role, sign in, and access only
+     the tools needed for your job.
+    </p>
+
+    <div class="feature-list">
+
+     <div>✓ Admin shipment & user management</div>
+
+     <div>✓ Delivery assignment & live status workflow</div>
+
+     <div>✓ Customer shipment creation & tracking</div>
+
+     <div>✓ Data saved directly in this browser</div>
+
+    </div>
+
+   </div>
+
+   <div class="login-box">
+
+    <h2>Welcome back</h2>
+
+    <p>Select your role and sign in.</p>
+
+    <div class="role-picker">
+
+     <button
+      class="role-btn ${state.selectedRole==="admin"?"active":""}"
+      onclick="chooseRole('admin')">
+      Admin
+     </button>
+
+     <button
+      class="role-btn ${state.selectedRole==="delivery"?"active":""}"
+      onclick="chooseRole('delivery')">
+      Delivery
+     </button>
+
+     <button
+      class="role-btn ${state.selectedRole==="customer"?"active":""}"
+      onclick="chooseRole('customer')">
+      Customer
+     </button>
+
+    </div>
+
+    <form onsubmit="login(event)">
+
+     <div class="field">
+      <label>Email</label>
+      <input
+       id="loginEmail"
+       type="email"
+       required
+       value="${
+        state.selectedRole==="admin"
+        ?"admin@shiptrack.com"
+        :state.selectedRole==="delivery"
+        ?"driver@shiptrack.com"
+        :"customer@shiptrack.com"
+       }">
+     </div>
+
+     <div class="field" style="margin-top:14px">
+
+      <label>Password</label>
+
+      <input
+       id="loginPassword"
+       type="password"
+       required
+       value="${
+        state.selectedRole==="admin"
+        ?"admin123"
+        :state.selectedRole==="delivery"
+        ?"driver123"
+        :"customer123"
+       }">
+
+     </div>
+
+     <button
+      class="btn btn-primary"
+      style="width:100%;margin-top:18px">
+
+      Sign In as ${roleLabel(state.selectedRole)}
+
+     </button>
+
+    </form>
+
+    <div class="demo">
+
+     <b>Demo accounts</b><br>
+
+     Admin:
+     admin@shiptrack.com / admin123<br>
+
+     Delivery:
+     driver@shiptrack.com / driver123<br>
+
+     Customer:
+     customer@shiptrack.com / customer123
+
+    </div>
+
+    <div
+     style="text-align:center;margin-top:17px;font-size:13px">
+
+     New customer?
+
+     <button
+      class="btn btn-outline btn-sm"
+      onclick="showRegister()">
+
+      Create account
+
+     </button>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </div>
+
+ `;
+}
+
+function chooseRole(r){
+ state.selectedRole=r;
+ renderLogin();
+}
+
+function showRegister(){
+
+ $("app").innerHTML=`
+
+ <div class="login-page">
+
+  <div class="login-shell">
+
+   <div class="login-hero">
+
+    <h1>Create your customer account.</h1>
+
+    <p>
+     Register as a customer to create and
+     track your shipments.
+    </p>
+
+   </div>
+
+   <div class="login-box">
+
+    <h2>Customer Registration</h2>
+
+    <p>
+     Admin and delivery accounts are managed
+     by the administrator.
+    </p>
+
+    <form onsubmit="register(event)">
+
+     <div class="form-grid">
+
+      <div class="field">
+
+       <label>Full Name</label>
+
+       <input id="regName" required>
+
+      </div>
+
+      <div class="field">
+
+       <label>Phone</label>
+
+       <input id="regPhone" required>
+
+      </div>
+
+      <div class="field full">
+
+       <label>Email</label>
+
+       <input
+        id="regEmail"
+        type="email"
+        required>
+
+      </div>
+
+      <div class="field">
+
+       <label>Password</label>
+
+       <input
+        id="regPassword"
+        type="password"
+        minlength="6"
+        required>
+
+      </div>
+
+      <div class="field">
+
+       <label>Confirm Password</label>
+
+       <input
+        id="regConfirm"
+        type="password"
+        minlength="6"
+        required>
+
+      </div>
+
+     </div>
+
+     <div class="actions">
+
+      <button class="btn btn-primary">
+       Register
+      </button>
+
+      <button
+       type="button"
+       class="btn btn-secondary"
+       onclick="renderLogin()">
+
+       Back to Login
+
+      </button>
+
+     </div>
+
+    </form>
+
+   </div>
+
+  </div>
+
+ </div>
+
+ `;
+}
+
+function register(e){
+
+ e.preventDefault();
+
+ let name=$("regName").value.trim();
+ let phone=$("regPhone").value.trim();
+ let email=$("regEmail").value.trim().toLowerCase();
+ let p=$("regPassword").value;
+ let c=$("regConfirm").value;
+
+ if(p!==c){
+  return toast("Passwords do not match");
+ }
+
+ if(state.users.some(u=>u.email===email)){
+  return toast("Email already registered");
+ }
+
+ state.users.push({
+  id:uid("u"),
+  name,
+  phone,
+  email,
+  password:p,
+  role:"customer",
+  active:true
+ });
+
+ save();
+
+ toast("Registration successful");
+
+ state.selectedRole="customer";
+
+ renderLogin();
+}
+
+function login(e){
+
+ e.preventDefault();
+
+ let email=$("loginEmail").value.trim().toLowerCase();
+ let password=$("loginPassword").value;
+
+ let u=state.users.find(
+  x=>x.email===email&&x.password===password
+ );
+
+ if(!u){
+  return toast("Invalid email or password");
+ }
+
+ if(!u.active){
+  return toast("This account is disabled");
+ }
+
+ if(u.role!==state.selectedRole){
+  return toast(
+   "Please choose the correct role for this account"
+  );
+ }
+
+ state.session={userId:u.id};
+ state.currentView="dashboard";
+
+ save();
+
+ renderApp();
+}
+
+function logout(){
+
+ state.session=null;
+
+ save();
+
+ renderLogin();
+}
+
+function navItems(){
+
+ let r=currentUser().role;
+
+ if(r==="admin"){
+
+  return[
+   ["dashboard","Dashboard","▦"],
+   ["shipments","All Shipments","📦"],
+   ["users","Users","👥"],
+   ["assign","Assign Delivery","🚚"],
+   ["create","Create Shipment","＋"],
+   ["track","Track","⌕"]
+  ];
+
+ }
+
+ if(r==="delivery"){
+
+  return[
+   ["dashboard","My Deliveries","▣"],
+   ["track","Track Shipment","⌕"],
+   ["pod","Proof of Delivery","✓"]
+  ];
+
+ }
+
+ return[
+  ["dashboard","Dashboard","⌂"],
+  ["create","Create Shipment","＋"],
+  ["track","Track Shipment","⌕"],
+  ["history","My History","↻"]
+ ];
+}
+
+function renderApp(){
+
+ if(!state.session||!currentUser()){
+  return renderLogin();
+ }
+
+ let u=currentUser();
+
+ $("app").innerHTML=`
+
+ <div class="app">
+
+  <header class="topbar">
+
+   <div class="brand">
+
+    <div class="brand-icon">🚚</div>
+
+    ShipTrack
+
+   </div>
+
+   <div class="top-user">
+
+    <span class="role-text">
+
+     <b>${esc(u.name)}</b>
+     ·
+     ${roleLabel(u.role)}
+
+    </span>
+
+    <div class="avatar">
+     ${esc(u.name.charAt(0).toUpperCase())}
+    </div>
+
+    <button
+     class="btn btn-secondary btn-sm"
+     onclick="logout()">
+
+     Logout
+
+    </button>
+
+   </div>
+
+  </header>
+
+  <div class="layout">
+
+   <aside class="sidebar">
+
+    <div class="sidebar-title">
+     ${roleLabel(u.role)} Menu
+    </div>
+
+    ${
+     navItems().map(n=>`
+
+      <button
+       class="nav-item ${
+        state.currentView===n[0]?"active":""
+       }"
+       onclick="go('${n[0]}')">
+
+       <span>${n[2]}</span>
+
+       <span class="nav-label">
+        ${n[1]}
+       </span>
+
+      </button>
+
+     `).join("")
+    }
+
+   </aside>
+
+   <main class="main" id="main"></main>
+
+  </div>
+
+ </div>
+
+ `;
+
+ renderView();
+}
+
+function go(v){
+
+ state.currentView=v;
+
+ renderApp();
+}
+
+function stat(label,value,icon){
+
+ return`
+
+ <div class="stat">
+
+  <div class="stat-icon">
+   ${icon}
+  </div>
+
+  <div class="stat-label">
+   ${label}
+  </div>
+
+  <div class="stat-value">
+   ${value}
+  </div>
+
+ </div>
+
+ `;
+}
+
+function customerShipments(){
+
+ return state.shipments.filter(
+  s=>s.customerId===currentUser().id
+ );
+}
+
+function driverShipments(){
+
+ return state.shipments.filter(
+  s=>s.deliveryPersonId===currentUser().id
+ );
+}
+
+function renderView(){
+
+ let r=currentUser().role;
+ let v=state.currentView;
+
+ if(r==="admin"){
+
+  ({
+   dashboard:adminDashboard,
+   shipments:adminShipments,
+   users:adminUsers,
+   assign:adminAssign,
+   create:adminCreate,
+   track:adminTrack
+  }[v]||adminDashboard)();
+
+ }else if(r==="delivery"){
+
+  ({
+   dashboard:deliveryDashboard,
+   track:deliveryTrack,
+   pod:deliveryPOD
+  }[v]||deliveryDashboard)();
+
+ }else{
+
+  ({
+   dashboard:customerDashboard,
+   create:customerCreate,
+   track:customerTrack,
+   history:customerHistory
+  }[v]||customerDashboard)();
+
+ }
+}
+
+function customerDashboard(){
+
+ let a=customerShipments();
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Customer Dashboard
+ </div>
+
+ <div class="page-subtitle">
+  Create, track and review your shipments.
+ </div>
+
+ <div class="grid stats">
+
+  ${stat(
+   "Total Shipments",
+   a.length,
+   "📦"
+  )}
+
+  ${stat(
+   "In Transit",
+   a.filter(
+    s=>["Picked Up","In Transit","Out for Delivery"]
+    .includes(s.status)
+   ).length,
+   "🚚"
+  )}
+
+  ${stat(
+   "Delivered",
+   a.filter(s=>s.status==="Delivered").length,
+   "✓"
+  )}
+
+  ${stat(
+   "Pending",
+   a.filter(s=>s.status==="Created").length,
+   "⏳"
+  )}
+
+ </div>
+
+ <div class="card">
+
+  <div class="card-head">
+
+   <h3>Recent Shipments</h3>
+
+   <button
+    class="btn btn-primary btn-sm"
+    onclick="go('create')">
+
+    + New Shipment
+
+   </button>
+
+  </div>
+
+  ${shipmentTable(a,true)}
+
+ </div>
+
+ `;
+}
+
+function shipmentTable(arr,customer=false){
+
+ if(!arr.length){
+
+  return`
+   <div class="empty">
+    No shipments found.
+   </div>
+  `;
+
+ }
+
+ return`
+
+ <div class="table-wrap">
+
+  <table>
+
+   <thead>
+
+    <tr>
+
+     <th>Tracking ID</th>
+     <th>Recipient</th>
+     <th>Destination</th>
+     <th>Service</th>
+     <th>Status</th>
+     <th>Action</th>
+
+    </tr>
+
+   </thead>
+
+   <tbody>
+
+    ${
+     arr.map(s=>`
+
+      <tr>
+
+       <td>
+        <b>${esc(s.trackingId)}</b>
+       </td>
+
+       <td>
+        ${esc(s.recipientName)}
+       </td>
+
+       <td>
+        ${esc(s.destination)}
+       </td>
+
+       <td>
+        ${esc(s.service)}
+       </td>
+
+       <td>
+        ${badge(s.status)}
+       </td>
+
+       <td>
+
+        <button
+         class="btn btn-outline btn-sm"
+         onclick="quickTrack('${s.trackingId}')">
+
+         Track
+
+        </button>
+
+       </td>
+
+      </tr>
+
+     `).join("")
+    }
+
+   </tbody>
+
+  </table>
+
+ </div>
+
+ `;
+}
+
+function customerCreate(){
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Create Shipment
+ </div>
+
+ <div class="page-subtitle">
+  Enter your own shipment information.
+  A unique tracking ID is generated automatically.
+ </div>
+
+ <div class="card">
+
+  <form onsubmit="createShipment(event)">
+
+   <div class="form-grid">
+
+    <div class="field">
+
+     <label>Sender Name</label>
+
+     <input
+      id="senderName"
+      value="${esc(currentUser().name)}"
+      required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Sender Phone</label>
+
+     <input
+      id="senderPhone"
+      value="${esc(currentUser().phone||"")}"
+      required>
+
+    </div>
+
+    <div class="field full">
+
+     <label>Origin Address</label>
+
+     <textarea
+      id="origin"
+      required
+      placeholder="Full pickup address"></textarea>
+
+    </div>
+
+    <div class="field">
+
+     <label>Recipient Name</label>
+
+     <input id="recipient" required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Recipient Phone</label>
+
+     <input id="recipientPhone" required>
+
+    </div>
+
+    <div class="field full">
+
+     <label>Destination Address</label>
+
+     <textarea
+      id="destination"
+      required
+      placeholder="Full delivery address"></textarea>
+
+    </div>
+
+    <div class="field">
+
+     <label>Weight (kg)</label>
+
+     <input
+      id="weight"
+      type="number"
+      min="0.1"
+      step="0.1"
+      required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Service</label>
+
+     <select id="service">
+
+      <option>Standard</option>
+      <option>Express</option>
+      <option>Same Day</option>
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Priority</label>
+
+     <select id="priority">
+
+      <option>Normal</option>
+      <option>High</option>
+      <option>Urgent</option>
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Estimated Delivery</label>
+
+     <input
+      id="eta"
+      type="date"
+      required>
+
+    </div>
+
+   </div>
+
+   <div class="actions">
+
+    <button class="btn btn-primary">
+
+     Create Shipment & Generate Tracking ID
+
+    </button>
+
+   </div>
+
+  </form>
+
+ </div>
+
+ `;
+}
+
+function createShipment(e){
+
+ e.preventDefault();
+
+ let s={
+
+  id:uid("s"),
+
+  trackingId:trackingId(),
+
+  customerId:currentUser().id,
+
+  customerName:currentUser().name,
+
+  senderName:$("senderName").value,
+
+  senderPhone:$("senderPhone").value,
+
+  origin:$("origin").value,
+
+  recipientName:$("recipient").value,
+
+  recipientPhone:$("recipientPhone").value,
+
+  destination:$("destination").value,
+
+  weight:$("weight").value,
+
+  service:$("service").value,
+
+  priority:$("priority").value,
+
+  deliveryPersonId:null,
+
+  deliveryPersonName:null,
+
+  status:"Created",
+
+  createdAt:new Date().toISOString(),
+
+  estimatedDelivery:
+   new Date($("eta").value+"T23:59:00").toISOString(),
+
+  events:[]
+
+ };
+
+ addEvent(
+  s,
+  "Created",
+  "Shipment created by customer"
+ );
+
+ state.shipments.unshift(s);
+
+ save();
+
+ openModal(`
+
+  <h3>
+   Shipment Created Successfully
+  </h3>
+
+  <div class="notice">
+
+   Your tracking ID is
+
+   <b style="font-size:20px">
+    ${esc(s.trackingId)}
+   </b>
+
+  </div>
+
+  <p>
+   Use this tracking ID to monitor your shipment.
+  </p>
+
+  <div class="actions">
+
+   <button
+    class="btn btn-primary"
+    onclick="closeModal();quickTrack('${s.trackingId}')">
+
+    Track Now
+
+   </button>
+
+   <button
+    class="btn btn-secondary"
+    onclick="closeModal()">
+
+    Close
+
+   </button>
+
+  </div>
+
+ `);
+}
+
+function customerTrack(){
+
+ trackPage(
+  "Track Your Shipment",
+  "Enter your tracking ID to see the latest shipment status.",
+  "customer"
+ );
+
+}
+
+function trackPage(title,sub,role){
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  ${title}
+ </div>
+
+ <div class="page-subtitle">
+  ${sub}
+ </div>
+
+ <div class="card">
+
+  <div class="searchbar">
+
+   <input
+    id="trackingSearch"
+    placeholder="Example: ST-483921-ABC">
+
+   <button
+    class="btn btn-primary"
+    onclick="performTrack('${role}')">
+
+    Search
+
+   </button>
+
+  </div>
+
+  <div id="trackResult"></div>
+
+ </div>
+
+ `;
+}
+
+function quickTrack(id){
+
+ state.currentView="track";
+
+ renderApp();
+
+ setTimeout(()=>{
+
+  let el=$("trackingSearch");
+
+  if(el){
+
+   el.value=id;
+
+   performTrack(currentUser().role);
+
+  }
+
+ },30);
+}
+
+function performTrack(role){
+
+ let id=$("trackingSearch").value.trim().toUpperCase();
+
+ let s=state.shipments.find(
+  x=>x.trackingId.toUpperCase()===id
+ );
+
+ if(!s){
+
+  return $("trackResult").innerHTML=`
+
+   <div class="empty">
+
+    No shipment found for
+    <b>${esc(id)}</b>.
+
+   </div>
+
+  `;
+
+ }
+
+ if(
+  role==="customer" &&
+  s.customerId!==currentUser().id
+ ){
+
+  return $("trackResult").innerHTML=`
+
+   <div class="empty">
+    You can only track your own shipments.
+   </div>
+
+  `;
+
+ }
+
+ if(
+  role==="delivery" &&
+  s.deliveryPersonId!==currentUser().id
+ ){
+
+  return $("trackResult").innerHTML=`
+
+   <div class="empty">
+    You can only track shipments assigned to you.
+   </div>
+
+  `;
+
+ }
+
+ $("trackResult").innerHTML=trackCard(s,role);
+}
+
+function trackCard(s,role){
+
+ let steps=[
+  "Created",
+  "Picked Up",
+  "In Transit",
+  "Out for Delivery",
+  "Delivered"
+ ];
+
+ let idx=steps.indexOf(s.status);
+
+ return`
+
+ <div class="notice">
+
+  <b>${esc(s.trackingId)}</b>
+
+  · Current status:
+
+  ${badge(s.status)}
+
+  ${
+   s.deliveryPersonName
+   ?` · Delivery: ${esc(s.deliveryPersonName)}`
+   :" · Waiting for delivery assignment"
+  }
+
+ </div>
+
+ <div class="progress">
+
+  ${
+   steps.map((x,i)=>`
+
+    <div class="step ${i<=idx?"done":""}">
+     ${x}
+    </div>
+
+   `).join("")
+  }
+
+ </div>
+
+ <div class="form-grid">
+
+  <div>
+
+   <b>Sender</b>
+
+   <p>
+    ${esc(s.senderName)}<br>
+    ${esc(s.origin)}
+   </p>
+
+  </div>
+
+  <div>
+
+   <b>Recipient</b>
+
+   <p>
+    ${esc(s.recipientName)}<br>
+    ${esc(s.destination)}
+   </p>
+
+  </div>
+
+  <div>
+
+   <b>Service</b>
+
+   <p>
+    ${esc(s.service)}
+    ·
+    ${esc(s.priority)} priority
+   </p>
+
+  </div>
+
+  <div>
+
+   <b>Estimated Delivery</b>
+
+   <p>
+    ${fmt(s.estimatedDelivery)}
+   </p>
+
+  </div>
+
+ </div>
+
+ <hr
+  style="border:0;border-top:1px solid #e2e8f0;margin:20px 0">
+
+ <h3>Tracking Timeline</h3>
+
+ <div class="timeline">
+
+  ${
+   (s.events||[]).map(e=>`
+
+    <div class="event">
+
+     <strong>
+      ${esc(e.status)}
+     </strong>
+
+     <span>
+      ${fmt(e.date)}
+      ·
+      ${esc(e.by||"System")}
+     </span>
+
+     <p style="margin-top:4px;font-size:13px">
+      ${esc(e.note||"")}
+     </p>
+
+    </div>
+
+   `).join("")
+  }
+
+ </div>
+
+ ${
+  role==="delivery" &&
+  s.status!=="Delivered"
+
+  ?`
+
+   <div class="actions">
+
+    <button
+     class="btn btn-primary"
+     onclick="updateDeliveryStatus('${s.id}')">
+
+     Update Status
+
+    </button>
+
+    <button
+     class="btn btn-success"
+     onclick="openPOD('${s.id}')">
+
+     Proof of Delivery
+
+    </button>
+
+   </div>
+
+  `:""
+ }
+
+ `;
+}
+
+function customerHistory(){
+
+ let a=customerShipments();
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  My Shipment History
+ </div>
+
+ <div class="page-subtitle">
+  All shipments created under your customer account.
+ </div>
+
+ <div class="card">
+
+  ${shipmentTable(a,true)}
+
+ </div>
+
+ `;
+}
+
+function deliveryDashboard(){
+
+ let a=driverShipments();
+
+ let active=a.filter(
+  s=>s.status!=="Delivered" &&
+     s.status!=="Cancelled"
+ );
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Delivery Dashboard
+ </div>
+
+ <div class="page-subtitle">
+  Manage shipments assigned to you.
+ </div>
+
+ <div class="grid stats">
+
+  ${stat("Assigned",a.length,"📦")}
+
+  ${stat("Active",active.length,"🚚")}
+
+  ${stat(
+   "Out for Delivery",
+   a.filter(
+    s=>s.status==="Out for Delivery"
+   ).length,
+   "📍"
+  )}
+
+  ${stat(
+   "Delivered",
+   a.filter(
+    s=>s.status==="Delivered"
+   ).length,
+   "✓"
+  )}
+
+ </div>
+
+ <div class="card">
+
+  <div class="card-head">
+
+   <h3>My Assigned Shipments</h3>
+
+  </div>
+
+  ${shipmentTable(a)}
+
+ </div>
+
+ `;
+}
+
+function deliveryTrack(){
+
+ trackPage(
+  "Track Assigned Shipment",
+  "Search a shipment that is assigned to your delivery account.",
+  "delivery"
+ );
+
+}
+
+function updateDeliveryStatus(id){
+
+ let s=state.shipments.find(x=>x.id===id);
+
+ if(!s)return;
+
+ let next={
+  Created:"Picked Up",
+  "Picked Up":"In Transit",
+  "In Transit":"Out for Delivery",
+  "Out for Delivery":"Delivered"
+ }[s.status];
+
+ if(!next){
+  return toast("No next status available");
+ }
+
+ if(next==="Delivered"){
+  return openPOD(id);
+ }
+
+ s.status=next;
+
+ addEvent(
+  s,
+  next,
+  next==="Picked Up"
+   ?"Package picked up"
+   :next==="In Transit"
+   ?"Package is in transit"
+   :"Package is out for delivery"
+ );
+
+ save();
+
+ toast("Status updated to "+next);
+
+ renderView();
+}
+
+function deliveryPOD(){
+
+ let a=driverShipments().filter(
+  s=>s.status==="Out for Delivery"
+ );
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Proof of Delivery
+ </div>
+
+ <div class="page-subtitle">
+  Complete delivery confirmation for shipments
+  that are out for delivery.
+ </div>
+
+ <div class="card">
+
+  ${
+   a.length
+
+   ?a.map(s=>`
+
+    <div
+     style="
+      padding:15px 0;
+      border-bottom:1px solid #e2e8f0;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center">
+
+     <div>
+
+      <b>${esc(s.trackingId)}</b>
+
+      <br>
+
+      <span
+       style="font-size:13px;color:#64748b">
+
+       ${esc(s.recipientName)}
+       ·
+       ${esc(s.destination)}
+
+      </span>
+
+     </div>
+
+     <button
+      class="btn btn-success btn-sm"
+      onclick="openPOD('${s.id}')">
+
+      Complete Delivery
+
+     </button>
+
+    </div>
+
+   `).join("")
+
+   :`
+
+    <div class="empty">
+     No shipments are currently waiting
+     for proof of delivery.
+    </div>
+
+   `
+  }
+
+ </div>
+
+ `;
+}
+
+function openPOD(id){
+
+ let s=state.shipments.find(
+  x=>x.id===id
+ );
+
+ if(!s)return;
+
+ openModal(`
+
+  <h3>
+   Proof of Delivery
+  </h3>
+
+  <p
+   style="color:#64748b;margin:7px 0 18px">
+
+   ${esc(s.trackingId)}
+   ·
+   ${esc(s.recipientName)}
+
+  </p>
+
+  <form
+   onsubmit="submitPOD(event,'${id}')">
+
+   <div class="form-grid">
+
+    <div class="field">
+
+     <label>Receiver Name</label>
+
+     <input
+      id="podReceiver"
+      value="${esc(s.recipientName)}"
+      required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Receiver Phone</label>
+
+     <input
+      id="podPhone"
+      value="${esc(s.recipientPhone||"")}"
+      required>
+
+    </div>
+
+    <div class="field full">
+
+     <label>Delivery Notes</label>
+
+     <textarea
+      id="podNotes"
+      required>Package delivered successfully.</textarea>
+
+    </div>
+
+    <div class="field full">
+
+     <label>
+      Photo / Proof Reference (optional)
+     </label>
+
+     <input
+      id="podPhoto"
+      type="file"
+      accept="image/*">
+
+    </div>
+
+   </div>
+
+   <div class="actions">
+
+    <button class="btn btn-success">
+     Confirm Delivered
+    </button>
+
+    <button
+     type="button"
+     class="btn btn-secondary"
+     onclick="closeModal()">
+
+     Cancel
+
+    </button>
+
+   </div>
+
+  </form>
+
+ `);
+}
+
+function submitPOD(e,id){
+
+ e.preventDefault();
+
+ let s=state.shipments.find(
+  x=>x.id===id
+ );
+
+ if(!s)return;
+
+ s.pod={
+
+  receiver:$("podReceiver").value,
+
+  phone:$("podPhone").value,
+
+  notes:$("podNotes").value,
+
+  photoName:$("podPhoto").files[0]?.name||"",
+
+  date:new Date().toISOString()
+
+ };
+
+ s.status="Delivered";
+
+ addEvent(
+  s,
+  "Delivered",
+  "Delivery completed. Receiver: "+
+  s.pod.receiver+
+  ". "+
+  s.pod.notes
+ );
+
+ save();
+
+ closeModal();
+
+ toast("Shipment marked as Delivered");
+
+ renderView();
+}
+
+function adminDashboard(){
+
+ let a=state.shipments;
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Admin Dashboard
+ </div>
+
+ <div class="page-subtitle">
+  Full control over users, shipments and delivery assignments.
+ </div>
+
+ <div class="grid stats">
+
+  ${stat("All Shipments",a.length,"📦")}
+
+  ${stat(
+   "Unassigned",
+   a.filter(s=>!s.deliveryPersonId).length,
+   "⚠️"
+  )}
+
+  ${stat(
+   "In Transit",
+   a.filter(
+    s=>[
+     "Picked Up",
+     "In Transit",
+     "Out for Delivery"
+    ].includes(s.status)
+   ).length,
+   "🚚"
+  )}
+
+  ${stat(
+   "Delivered",
+   a.filter(
+    s=>s.status==="Delivered"
+   ).length,
+   "✓"
+  )}
+
+ </div>
+
+ <div
+  class="grid"
+  style="grid-template-columns:1fr 1fr">
+
+  <div class="card">
+
+   <h3>Quick Actions</h3>
+
+   <div class="actions">
+
+    <button
+     class="btn btn-primary"
+     onclick="go('create')">
+
+     Create Shipment
+
+    </button>
+
+    <button
+     class="btn btn-info"
+     onclick="go('assign')">
+
+     Assign Delivery
+
+    </button>
+
+    <button
+     class="btn btn-secondary"
+     onclick="go('users')">
+
+     Manage Users
+
+    </button>
+
+   </div>
+
+  </div>
+
+  <div class="card">
+
+   <h3>System Information</h3>
+
+   <p
+    style="
+     font-size:13px;
+     color:#64748b;
+     line-height:1.8">
+
+    This version stores data in browser
+    localStorage. It is ideal for a
+    project/demo website. For real
+    multi-device access, connect the
+    same interface to a backend database.
+
+   </p>
+
+  </div>
+
+ </div>
+
+ <div class="card">
+
+  <div class="card-head">
+
+   <h3>Latest Shipments</h3>
+
+   <button
+    class="btn btn-outline btn-sm"
+    onclick="go('shipments')">
+
+    View All
+
+   </button>
+
+  </div>
+
+  ${shipmentTable(a.slice(0,8))}
+
+ </div>
+
+ `;
+}
+
+function adminShipments(){
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  All Shipments
+ </div>
+
+ <div class="page-subtitle">
+  View and monitor every shipment in the system.
+ </div>
+
+ <div class="card">
+
+  <div class="searchbar">
+
+   <input
+    id="adminSearch"
+    oninput="filterAdminShipments()"
+    placeholder="Search tracking ID, customer, recipient...">
+
+  </div>
+
+  <div id="adminShipmentTable">
+
+   ${shipmentTable(state.shipments)}
+
+  </div>
+
+ </div>
+
+ `;
+}
+
+function filterAdminShipments(){
+
+ let q=$("adminSearch").value.toLowerCase();
+
+ let a=state.shipments.filter(
+  s=>JSON.stringify(s).toLowerCase().includes(q)
+ );
+
+ $("adminShipmentTable").innerHTML=
+  shipmentTable(a);
+}
+
+function adminUsers(){
+
+ let u=state.users;
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  User Management
+ </div>
+
+ <div class="page-subtitle">
+  View customer and delivery accounts.
+  Admin accounts are protected.
+ </div>
+
+ <div class="card">
+
+  <div class="table-wrap">
+
+   <table>
+
+    <thead>
+
+     <tr>
+
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Phone</th>
+      <th>Status</th>
+      <th>Action</th>
+
+     </tr>
+
+    </thead>
+
+    <tbody>
+
+     ${
+      u.map(x=>`
+
+       <tr>
+
+        <td>
+         <b>${esc(x.name)}</b>
+        </td>
+
+        <td>
+         ${esc(x.email)}
+        </td>
+
+        <td>
+         <span class="pill">
+          ${roleLabel(x.role)}
+         </span>
+        </td>
+
+        <td>
+         ${esc(x.phone||"-")}
+        </td>
+
+        <td>
+
+         ${
+          x.active
+          ?'<span class="badge badge-delivered">Active</span>'
+          :'<span class="badge badge-cancelled">Disabled</span>'
+         }
+
+        </td>
+
+        <td>
+
+         ${
+          x.id==="u_admin"
+
+          ?'<span class="pill">Protected</span>'
+
+          :`
+
+           <button
+            class="btn ${
+             x.active
+             ?"btn-danger"
+             :"btn-success"
+            } btn-sm"
+            onclick="toggleUser('${x.id}')">
+
+            ${x.active?"Disable":"Enable"}
+
+           </button>
+
+          `
+         }
+
+        </td>
+
+       </tr>
+
+      `).join("")
+     }
+
+    </tbody>
+
+   </table>
+
+  </div>
+
+ </div>
+
+ `;
+}
+
+function toggleUser(id){
+
+ let u=state.users.find(
+  x=>x.id===id
+ );
+
+ if(!u)return;
+
+ u.active=!u.active;
+
+ save();
+
+ toast("User status changed");
+
+ renderView();
+}
+
+function adminAssign(){
+
+ let un=state.shipments.filter(
+  s=>!s.deliveryPersonId &&
+     s.status!=="Delivered"
+ );
+
+ let drivers=state.users.filter(
+  u=>u.role==="delivery" &&
+     u.active
+ );
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Assign Delivery Person
+ </div>
+
+ <div class="page-subtitle">
+  Admin chooses which active delivery person
+  handles each shipment.
+ </div>
+
+ <div class="card">
+
+  <form onsubmit="assignDriver(event)">
+
+   <div class="form-grid">
+
+    <div class="field">
+
+     <label>Shipment</label>
+
+     <select
+      id="assignShipment"
+      required>
+
+      ${
+       un.length
+
+       ?un.map(s=>`
+
+        <option value="${s.id}">
+
+         ${esc(s.trackingId)}
+         ·
+         ${esc(s.recipientName)}
+
+        </option>
+
+       `).join("")
+
+       :`
+
+        <option value="">
+         No unassigned shipments
+        </option>
+
+       `
+      }
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Delivery Person</label>
+
+     <select
+      id="assignDriver"
+      required>
+
+      ${
+       drivers.length
+
+       ?drivers.map(d=>`
+
+        <option value="${d.id}">
+
+         ${esc(d.name)}
+         ·
+         ${esc(d.email)}
+
+        </option>
+
+       `).join("")
+
+       :`
+
+        <option value="">
+         No active delivery accounts
+        </option>
+
+       `
+      }
+
+     </select>
+
+    </div>
+
+   </div>
+
+   <div class="actions">
+
+    <button
+     class="btn btn-primary"
+     ${!un.length||!drivers.length?"disabled":""}>
+
+     Assign Shipment
+
+    </button>
+
+   </div>
+
+  </form>
+
+ </div>
+
+ <div class="card">
+
+  <h3>Current Assignments</h3>
+
+  ${assignmentTable()}
+
+ </div>
+
+ `;
+}
+
+function assignmentTable(){
+
+ let a=state.shipments.filter(
+  s=>s.deliveryPersonId
+ );
+
+ if(!a.length){
+
+  return`
+   <div class="empty">
+    No assignments yet.
+   </div>
+  `;
+
+ }
+
+ return`
+
+ <div class="table-wrap">
+
+  <table>
+
+   <thead>
+
+    <tr>
+
+     <th>Tracking</th>
+     <th>Customer</th>
+     <th>Delivery Person</th>
+     <th>Status</th>
+     <th>Action</th>
+
+    </tr>
+
+   </thead>
+
+   <tbody>
+
+    ${
+     a.map(s=>`
+
+      <tr>
+
+       <td>
+        <b>${esc(s.trackingId)}</b>
+       </td>
+
+       <td>
+        ${esc(s.customerName)}
+       </td>
+
+       <td>
+        ${esc(s.deliveryPersonName)}
+       </td>
+
+       <td>
+        ${badge(s.status)}
+       </td>
+
+       <td>
+
+        <button
+         class="btn btn-outline btn-sm"
+         onclick="reassign('${s.id}')">
+
+         Reassign
+
+        </button>
+
+       </td>
+
+      </tr>
+
+     `).join("")
+    }
+
+   </tbody>
+
+  </table>
+
+ </div>
+
+ `;
+}
+
+function assignDriver(e){
+
+ e.preventDefault();
+
+ let s=state.shipments.find(
+  x=>x.id===$("assignShipment").value
+ );
+
+ let d=state.users.find(
+  x=>x.id===$("assignDriver").value
+ );
+
+ if(!s||!d)return;
+
+ s.deliveryPersonId=d.id;
+ s.deliveryPersonName=d.name;
+
+ addEvent(
+  s,
+  s.status,
+  "Assigned to delivery person: "+d.name
+ );
+
+ save();
+
+ toast("Shipment assigned to "+d.name);
+
+ renderView();
+}
+
+function reassign(id){
+
+ let s=state.shipments.find(
+  x=>x.id===id
+ );
+
+ let drivers=state.users.filter(
+  u=>u.role==="delivery" &&
+     u.active
+ );
+
+ if(!s||!drivers.length){
+  return toast("No active delivery persons");
+ }
+
+ openModal(`
+
+  <h3>
+   Reassign Shipment
+  </h3>
+
+  <p style="margin:7px 0 15px">
+   ${esc(s.trackingId)}
+  </p>
+
+  <select
+   id="reassignDriver"
+   style="
+    width:100%;
+    padding:11px;
+    border:1px solid #cbd5e1;
+    border-radius:10px">
+
+   ${
+    drivers.map(d=>`
+
+     <option
+      value="${d.id}"
+      ${d.id===s.deliveryPersonId?"selected":""}>
+
+      ${esc(d.name)}
+
+     </option>
+
+    `).join("")
+   }
+
+  </select>
+
+  <div class="actions">
+
+   <button
+    class="btn btn-primary"
+    onclick="saveReassign('${id}')">
+
+    Save Assignment
+
+   </button>
+
+   <button
+    class="btn btn-secondary"
+    onclick="closeModal()">
+
+    Cancel
+
+   </button>
+
+  </div>
+
+ `);
+}
+
+function saveReassign(id){
+
+ let s=state.shipments.find(
+  x=>x.id===id
+ );
+
+ let d=state.users.find(
+  x=>x.id===$("reassignDriver").value
+ );
+
+ if(!s||!d)return;
+
+ s.deliveryPersonId=d.id;
+ s.deliveryPersonName=d.name;
+
+ addEvent(
+  s,
+  s.status,
+  "Reassigned to "+d.name
+ );
+
+ save();
+
+ closeModal();
+
+ toast("Shipment reassigned");
+
+ renderView();
+}
+
+function adminCreate(){
+
+ $("main").innerHTML=`
+
+ <div class="page-title">
+  Admin Create Shipment
+ </div>
+
+ <div class="page-subtitle">
+  Admins can create shipments on behalf
+  of an existing customer.
+ </div>
+
+ <div class="card">
+
+  <form onsubmit="adminCreateShipment(event)">
+
+   <div class="form-grid">
+
+    <div class="field full">
+
+     <label>Customer</label>
+
+     <select id="adminCustomer" required>
+
+      ${
+       state.users
+       .filter(
+        u=>u.role==="customer" &&
+           u.active
+       )
+       .map(u=>`
+
+        <option value="${u.id}">
+
+         ${esc(u.name)}
+         ·
+         ${esc(u.email)}
+
+        </option>
+
+       `).join("")
+      }
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Sender Name</label>
+
+     <input id="aSender" required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Sender Phone</label>
+
+     <input id="aPhone" required>
+
+    </div>
+
+    <div class="field full">
+
+     <label>Origin Address</label>
+
+     <textarea id="aOrigin" required></textarea>
+
+    </div>
+
+    <div class="field">
+
+     <label>Recipient Name</label>
+
+     <input id="aRecipient" required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Recipient Phone</label>
+
+     <input id="aRecipientPhone" required>
+
+    </div>
+
+    <div class="field full">
+
+     <label>Destination Address</label>
+
+     <textarea
+      id="aDestination"
+      required></textarea>
+
+    </div>
+
+    <div class="field">
+
+     <label>Weight (kg)</label>
+
+     <input
+      id="aWeight"
+      type="number"
+      min="0.1"
+      step="0.1"
+      required>
+
+    </div>
+
+    <div class="field">
+
+     <label>Service</label>
+
+     <select id="aService">
+
+      <option>Standard</option>
+      <option>Express</option>
+      <option>Same Day</option>
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Priority</label>
+
+     <select id="aPriority">
+
+      <option>Normal</option>
+      <option>High</option>
+      <option>Urgent</option>
+
+     </select>
+
+    </div>
+
+    <div class="field">
+
+     <label>Estimated Delivery</label>
+
+     <input
+      id="aEta"
+      type="date"
+      required>
+
+    </div>
+
+   </div>
+
+   <div class="actions">
+
+    <button class="btn btn-primary">
+     Create Shipment
+    </button>
+
+   </div>
+
+  </form>
+
+ </div>
+
+ `;
+}
+
+function adminCreateShipment(e){
+
+ e.preventDefault();
+
+ let c=state.users.find(
+  u=>u.id===$("adminCustomer").value
+ );
+
+ if(!c)return;
+
+ let s={
+
+  id:uid("s"),
+
+  trackingId:trackingId(),
+
+  customerId:c.id,
+
+  customerName:c.name,
+
+  senderName:$("aSender").value,
+
+  senderPhone:$("aPhone").value,
+
+  origin:$("aOrigin").value,
+
+  recipientName:$("aRecipient").value,
+
+  recipientPhone:$("aRecipientPhone").value,
+
+  destination:$("aDestination").value,
+
+  weight:$("aWeight").value,
+
+  service:$("aService").value,
+
+  priority:$("aPriority").value,
+
+  deliveryPersonId:null,
+
+  deliveryPersonName:null,
+
+  status:"Created",
+
+  createdAt:new Date().toISOString(),
+
+  estimatedDelivery:
+   new Date($("aEta").value+"T23:59:00").toISOString(),
+
+  events:[]
+
+ };
+
+ addEvent(
+  s,
+  "Created",
+  "Shipment created by administrator"
+ );
+
+ state.shipments.unshift(s);
+
+ save();
+
+ toast(
+  "Shipment created: "+s.trackingId
+ );
+
+ go("shipments");
+}
+
+function adminTrack(){
+
+ trackPage(
+  "Track Any Shipment",
+  "Admin can track every shipment using its tracking ID.",
+  "admin"
+ );
+}
+
+function openModal(content){
+
+ $("modal").innerHTML=`
+
+  <div class="modal">
+
+   <div
+    style="
+     display:flex;
+     justify-content:flex-end">
+
+    <button
+     class="close"
+     onclick="closeModal()">
+
+     ✕
+
+    </button>
+
+   </div>
+
+   ${content}
+
+  </div>
+
+ `;
+
+ $("modal").classList.remove("hidden");
+}
+
+function closeModal(){
+
+ $("modal").classList.add("hidden");
+
+ $("modal").innerHTML="";
+}
+
+function init(){
+
+ load();
+
+ seed();
+
+ if(
+  state.session &&
+  currentUser()
+ ){
+
+  renderApp();
+
+ }else{
+
+  renderLogin();
+
+ }
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
